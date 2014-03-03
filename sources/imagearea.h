@@ -124,7 +124,7 @@ public:
      * @param factor Scale factor
      */
     bool zoomImage(qreal factor);
-    inline void setZoomFactor(qreal factor) { mZoomFactor *= factor; }
+    inline void setZoomFactor(qreal factor) { mZoomFactor = factor; }
     inline qreal getZoomFactor() { return mZoomFactor; }
     inline QUndoStack* getUndoStack() { return mUndoStack; }
     inline void setIsPaint(bool isPaint) { mIsPaint = isPaint; }
@@ -208,6 +208,7 @@ private:
     AbstractInstrument *mInstrumentHandler;
     QVector<AbstractEffect*> mEffectsHandlers;
     AbstractEffect *mEffectHandler;
+    void restoreOriginalSize();
 
 signals:
     /**

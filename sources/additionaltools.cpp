@@ -39,7 +39,6 @@ AdditionalTools::AdditionalTools(ImageArea *pImageArea, QObject *parent) :
     QObject(parent)
 {
     mPImageArea = pImageArea;
-    mZoomedFactor = 1;
 }
 
 AdditionalTools::~AdditionalTools()
@@ -114,21 +113,19 @@ void AdditionalTools::rotateImage(bool flag)
 
 bool AdditionalTools::zoomImage(qreal factor)
 {
-    mZoomedFactor *= factor;
-    if(mZoomedFactor < 0.25)
+    int zoomFactor = mPImageArea->getZoomFactor();
+    zoomFactor *= factor;
+    if((zoomFactor < MIN_ZOOM_FACTOR)
+            || (zoomFactor > MAX_ZOOM_FACTOR))
     {
-        mZoomedFactor = 0.25;
-        return false;
-    }
-    else if(mZoomedFactor > 4)
-    {
-        mZoomedFactor = 4;
         return false;
     }
     else
     {
+        mPImageArea->setZoomFactor(zoomFactor);
+        mPImageArea->resize(mPImageArea->getImage()->size().width() * factor,
+                mPImageArea->getImage()->size().height() * factor);
         mPImageArea->setImage(mPImageArea->getImage()->transformed(QTransform::fromScale(factor, factor)));
-        mPImageArea->resize((mPImageArea->rect().width())*factor, (mPImageArea->rect().height())*factor);
         emit sendNewImageSize(mPImageArea->size());
         mPImageArea->setEdited(true);
         mPImageArea->clearSelection();

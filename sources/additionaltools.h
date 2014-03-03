@@ -79,10 +79,11 @@ public:
      * @return returns true in case of success
      */
     bool zoomImage(qreal factor);
-    
+
 private:
     ImageArea *mPImageArea; /**< A pointer to ImageArea */
-    qreal mZoomedFactor; /**< Difference between original and current image */
+    static const int MIN_ZOOM_FACTOR = 1;
+    static const int MAX_ZOOM_FACTOR = 8;
 
 signals:
     void sendNewImageSize(const QSize&);

@@ -401,11 +401,6 @@ void MainWindow::initializeMainMenu()
     connect(mZoomOutAction, SIGNAL(triggered()), this, SLOT(zoomOutAct()));
     zoomMenu->addAction(mZoomOutAction);
 
-    QAction *advancedZoomAction = new QAction(tr("Advanced Zoom..."), this);
-    advancedZoomAction->setIconVisibleInMenu(true);
-    connect(advancedZoomAction, SIGNAL(triggered()), this, SLOT(advancedZoomAct()));
-    zoomMenu->addAction(advancedZoomAction);
-
     mToolsMenu->addMenu(zoomMenu);
 
     QMenu *aboutMenu = menuBar()->addMenu(tr("&About"));
@@ -478,7 +473,7 @@ void MainWindow::activateTab(const int &index)
     mTabWidget->setCurrentIndex(index);
     getCurrentImageArea()->clearSelection();
     QSize size = getCurrentImageArea()->getImage()->size();
-    mSizeLabel->setText(QString("%1 x %2").arg(size.width()).arg(size.height()));
+    setNewSizeToSizeLabel(size);
 
     if(!getCurrentImageArea()->getFileName().isEmpty())
     {
@@ -493,7 +488,9 @@ void MainWindow::activateTab(const int &index)
 
 void MainWindow::setNewSizeToSizeLabel(const QSize &size)
 {
-    mSizeLabel->setText(QString("%1 x %2").arg(size.width()).arg(size.height()));
+    mSizeLabel->setText(QString("%1 x %2")
+            .arg(size.width()/getCurrentImageArea()->getZoomFactor())
+            .arg(size.height()/getCurrentImageArea()->getZoomFactor()));
 }
 
 void MainWindow::setNewPosToPosLabel(const QPoint &pos)
@@ -641,24 +638,11 @@ void MainWindow::rotateRightImageAct()
 void MainWindow::zoomInAct()
 {
     getCurrentImageArea()->zoomImage(2.0);
-    getCurrentImageArea()->setZoomFactor(2.0);
 }
 
 void MainWindow::zoomOutAct()
 {
     getCurrentImageArea()->zoomImage(0.5);
-    getCurrentImageArea()->setZoomFactor(0.5);
-}
-
-void MainWindow::advancedZoomAct()
-{
-    bool ok;
-    qreal factor = QInputDialog::getDouble(this, tr("Enter zoom factor"), tr("Zoom factor:"), 2.5, 0, 1000, 5, &ok);
-    if (ok)
-    {
-        getCurrentImageArea()->zoomImage(factor);
-        getCurrentImageArea()->setZoomFactor(factor);
-    }
 }
 
 void MainWindow::closeTabAct()
@@ -849,7 +833,7 @@ void MainWindow::helpAct()
     QMessageBox::about(this, tr("About EasyPaint"),
                        QString("<b>EasyPaint</b> %1: %2 <br> <br> %3: "
                                "<a href=\"https://github.com/Gr1N/EasyPaint/\">https://github.com/Gr1N/EasyPaint/</a>"
-                               "<br> <br>Copyright (c) 2012 EasyPaint team"
+                               "<br> <br>Copyright (c) 2014 EasyPaint team"
                                "<br> <br>%4:<ul>"
                                "<li><a href=\"mailto:grin.minsk@gmail.com\">Nikita Grishko</a> (Gr1N)</li>"
                                "<li><a href=\"mailto:faulknercs@yandex.ru\">Artem Stepanyuk</a> (faulknercs)</li>"

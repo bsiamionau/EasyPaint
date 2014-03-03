@@ -129,7 +129,6 @@ private slots:
     void rotateRightImageAct();
     void zoomInAct();
     void zoomOutAct();
-    void advancedZoomAct();
     void closeTabAct();
     void closeTab(int index);
     void setAllInstrumentsUnchecked(QAction *action);

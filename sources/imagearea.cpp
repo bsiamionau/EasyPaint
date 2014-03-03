@@ -217,6 +217,7 @@ void ImageArea::open(const QString &filePath)
 
 bool ImageArea::save()
 {
+    restoreOriginalSize();
     if(mFilePath.isEmpty())
     {
         return saveAs();
@@ -233,6 +234,7 @@ bool ImageArea::save()
 
 bool ImageArea::saveAs()
 {
+    restoreOriginalSize();
     bool result = true;
     QString filter;
     QString fileName(mFilePath);
@@ -284,6 +286,7 @@ bool ImageArea::saveAs()
 
 void ImageArea::autoSave()
 {
+    restoreOriginalSize();
     if(mIsEdited && !mFilePath.isEmpty() && DataSingleton::Instance()->getIsAutoSave())
     {
         if(mImage->save(mFilePath)) {
@@ -335,6 +338,11 @@ void ImageArea::applyEffect(EffectsEnum effect)
 bool ImageArea::zoomImage(qreal factor)
 {
     return mAdditionalTools->zoomImage(factor);
+}
+
+void ImageArea::restoreOriginalSize()
+{
+    zoomImage(1/mZoomFactor);
 }
 
 void ImageArea::copyImage()

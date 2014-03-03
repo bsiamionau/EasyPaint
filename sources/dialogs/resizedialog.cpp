@@ -29,7 +29,6 @@
 #include <QGridLayout>
 #include <QRadioButton>
 #include <QSpinBox>
-#include <QtCore/QDebug>
 #include <QDialogButtonBox>
 #include <QCheckBox>
 #include <QGroupBox>
